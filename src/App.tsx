@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import './App.css'
-import Datepicker from './components/datepicker'
+import Home from './components/pages/home'
+import {CurrentDateContext} from './context/currentDateContext'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentDate, setCurrentDate] = useState(new Date('11/01/1999'));
 
   return (
-    <>
-      <Datepicker />
-    </>
+    <CurrentDateContext.Provider value={{currentDate, setCurrentDate}} >
+      <Home />
+    </CurrentDateContext.Provider>
   )
 }
 
