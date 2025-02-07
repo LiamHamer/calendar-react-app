@@ -10,11 +10,19 @@ function Header() {
         setCurrentDate(new Date(value));
     }
 
+    const headerStyle = {
+        display: 'grid',
+        gridTemplateColumns: '3fr 1fr',
+        gridGap: '16px',
+    }
+
     return (
-        <header>
+        <header style={headerStyle}>
             <h1>Super cool calandar app</h1>
-            <h2>{datestring}</h2>
-            <Datepicker onChange={onDateChange} />
+            <div>
+                <h2>{datestring}</h2>
+                <Datepicker value={currentDate.toLocaleDateString("en-CA")} onChange={onDateChange} />
+            </div>
         </header>
     )
 }

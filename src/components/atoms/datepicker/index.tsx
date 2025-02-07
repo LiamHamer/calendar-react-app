@@ -1,8 +1,8 @@
 import './index.css';
 
-function Datepicker(props: { onChange: any }) {
+function Datepicker(props: { value: string, onChange: any }) {
     return (
-        <input type="date" onChange={e => props.onChange(e.target.value)} />
+        <input value={props.value} type="date" onChange={e => props.onChange(e.target.value)} />
     )
 }
 

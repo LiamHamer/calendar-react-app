@@ -6,17 +6,13 @@ function MainTemplate(props: { children: ReactElement[] }) {
 
     const containerStlye = {
         display: 'grid',
-        gridTemplateColumns: '1fr 3fr',
         gridGap: '16px',
-        gridTemplateAreas:'"head .""main"'
-
     }
 
     const contentStyle = {
         display: 'grid',
-        gridTemplateRows: '100px 200px',
-        gridGap: '16px',
-
+        gridTemplateColumns: '1.5fr 2fr',
+        gridGap: '128px',
     }
 
     return (
