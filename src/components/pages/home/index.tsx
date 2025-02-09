@@ -15,15 +15,34 @@ function Home() {
 
     useEffect(() => {
         if (events) {
+            const comparisionDate = new Date(currentDate);
+            comparisionDate.setHours(0, 0, 0);
+            console.log(currentDate.getDay())
             const filtered = events.filter((e) =>
-                new Date(e.start).getFullYear() === currentDate.getFullYear()
-                && new Date(e.start).getMonth() === currentDate.getMonth()
-                && new Date(e.start).getDay() === currentDate.getDay()
+                // if start dates match (regardless of event time)
+                e.start.toDateString() === currentDate.toDateString()
+                ||
+                // events on the same day of the week
+                (e.recurring === 'weekly'
+                    && e.start <= comparisionDate
+                    && e.start.getDay() === currentDate.getDay())
+                ||
+                (e.recurring === 'monthly'
+                    && e.start <= comparisionDate
+                    && e.start.getDay() === currentDate.getDay()
+                    && e.start.getMonth() !== currentDate.getMonth())
+                ||
+                // events on same day week, month in a  future year 
+                (e.recurring === 'anually'
+                    && e.start <= comparisionDate
+                    && e.start.getDay() === currentDate.getDay()
+                    && e.start.getWeek() === currentDate.getWeek()
+                    && e.start.getMonth() === currentDate.getMonth()
+                )
             );
+            console.log(filtered);
             setFilteredEvents(filtered);
         }
-        // console.log('filtered', events.filter((e) => new Date(e.start).getFullYear() === currentDate.getFullYear()));
-        // setEvents({...events.filter((e) => e.start !== null)})
     }, [currentDate, setFilteredEvents, events]);
 
     useEffect(() => {
