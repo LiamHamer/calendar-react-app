@@ -1,4 +1,10 @@
-function EventForm(props: { formState: any, formAction: any, defaultDate: string }) {
+import DateTimePicker from "../../atoms/datetimepicker";
+
+function EventForm(props: { formState: any, formAction: any, defaultDate: Date }) {
+
+    const startDate = new Date();
+    const endDate = new Date();
+
     return (
         <form action={props.formAction}  >
             <label htmlFor="title">Title</label>
@@ -8,9 +14,9 @@ function EventForm(props: { formState: any, formAction: any, defaultDate: string
             <fieldset>
                 <legend>Dates</legend>
                 <label htmlFor="start">Start</label>
-                <input name="start" id="start" type="datetime-local" required value={props.defaultDate} onChange={e => { console.log('start', e.target.value) }}></input>
+                <DateTimePicker name="start" id="start" dateValue={props.defaultDate} onChange={(e) => console.log(e)} />
                 <label htmlFor="end">End</label>
-                <input name="end" id="end" type="datetime-local" required value={props.defaultDate} onChange={e => { console.log('end', e.target.value) }} ></input>
+                <DateTimePicker name="end" id="end" dateValue={props.defaultDate} onChange={(e) => console.log(e)} />
             </fieldset>
             <button type="submit" >Create Event</button>
         </form>

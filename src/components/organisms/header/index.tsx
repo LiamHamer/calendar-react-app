@@ -1,13 +1,14 @@
 import { useContext } from "react";
-import Datepicker from "../../atoms/datepicker"
 import { CurrentDateContext } from "../../../context/currentDateContext";
+import Datepicker from "../../atoms/datepicker";
+
 
 function Header() {
     const { currentDate, setCurrentDate } = useContext(CurrentDateContext);
     const datestring: string = currentDate.toLocaleDateString(undefined, { dateStyle: 'long' });
 
-    const onDateChange = (value: any) => {
-        setCurrentDate(new Date(value));
+    const onDateChange = (value: Date) => {
+        setCurrentDate(value);
     }
 
     const headerStyle = {
@@ -18,10 +19,10 @@ function Header() {
 
     return (
         <header style={headerStyle}>
-            <h1>Super cool calandar app</h1>
+            <h1>Super cool calendar app</h1>
             <div>
                 <h2>{datestring}</h2>
-                <Datepicker value={currentDate.toLocaleDateString("en-CA")} onChange={onDateChange} />
+                <Datepicker dateValue={currentDate} onChange={onDateChange} />
             </div>
         </header>
     )

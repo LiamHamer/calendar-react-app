@@ -1,7 +1,6 @@
 import { ReactElement } from "react"
 import Header from "../../organisms/header"
 
-
 function MainTemplate(props: { children: ReactElement[] }) {
 
     const containerStlye = {

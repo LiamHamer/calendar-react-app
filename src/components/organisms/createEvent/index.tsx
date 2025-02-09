@@ -12,11 +12,6 @@ interface formState {
 function CreateEvent(props: { onEventCreated: any }) {
 
     const { currentDate } = useContext(CurrentDateContext);
-    const defaultDate = currentDate.toLocaleDateString("en-CA", { hour: '2-digit', minute: '2-digit', hourCycle: 'h24' }).replace(', ', 'T');
-    //const defaultEndDate = currentDate.toLocaleDateString("en-CA", { hour: '2-digit', minute: '2-digit', hourCycle: 'h24' }).replace(', ', 'T');
-
-
-    // '0004-04-04T16:44'
 
     const onFormSubmit = (
         prevState: any,
@@ -24,7 +19,6 @@ function CreateEvent(props: { onEventCreated: any }) {
     ) => {
 
         const event: any = Object.fromEntries(formData.entries())
-        event.id = Math.floor(Math.random() * (1 - 100000 + 1)) + 100000;
 
         props.onEventCreated(event);
 
@@ -35,8 +29,8 @@ function CreateEvent(props: { onEventCreated: any }) {
 
     return (
         <section>
-            <h4>New Event</h4>
-            <EventForm formState={state} formAction={formAction} defaultDate={defaultDate} ></EventForm>
+            <h3>Create new Event</h3>
+            <EventForm formState={state} formAction={formAction} defaultDate={currentDate} ></EventForm>
         </section>
     )
 }

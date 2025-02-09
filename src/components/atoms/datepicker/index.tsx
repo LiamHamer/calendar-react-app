@@ -1,8 +1,23 @@
+import { useEffect, useState } from 'react';
 import './index.css';
 
-function Datepicker(props: { value: string, onChange: any }) {
+function Datepicker(props: { dateValue: Date, onChange: (value: Date) => void }) {
+    const [value, setValue] = useState("");
+
+    useEffect(() => {
+        if (props.dateValue) {
+            const dateString = props.dateValue.toISOString().split('T')[0]
+            setValue(dateString);
+        }
+    }, [props.dateValue]);
+
+    const onDateChange = (event: any) => {
+        const dateValue = new Date(event.target.value);
+        props.onChange(dateValue);
+    }
+
     return (
-        <input value={props.value} type="date" onChange={e => props.onChange(e.target.value)} />
+        <input value={value} type="date" onChange={onDateChange} />
     )
 }
 
