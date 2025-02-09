@@ -9,6 +9,7 @@ function EventDetail(props: { event: eventDetails }) {
             <dd>description {props.event.description}</dd>
             <dd>Start time: {props.event.start.toString()}</dd>
             <dd>End time: {props.event.end.toString()}</dd>
+            <dd>Recurring: {props.event.recurring}</dd>
         </dl>
     )
 }

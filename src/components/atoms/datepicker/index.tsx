@@ -6,7 +6,8 @@ function Datepicker(props: { dateValue: Date, onChange: (value: Date) => void })
 
     useEffect(() => {
         if (props.dateValue) {
-            const dateString = props.dateValue.toISOString().split('T')[0]
+            const offset = props.dateValue.getTimezoneOffset()
+            const dateString = new Date(props.dateValue.getTime() - (offset * 60 * 1000)).toISOString().split('T')[0]
             setValue(dateString);
         }
     }, [props.dateValue]);

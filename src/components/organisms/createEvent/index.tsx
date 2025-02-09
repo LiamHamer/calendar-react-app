@@ -16,6 +16,7 @@ function CreateEvent(props: { onEventCreated?: (any) }) {
         description: '',
         startDate: dateString,
         endDate: dateString,
+        recurring: 'no'
     }
 
     const onFormSubmit = async (
@@ -31,7 +32,8 @@ function CreateEvent(props: { onEventCreated?: (any) }) {
             title: formEntries.title,
             description: formEntries.description,
             start: new Date(formEntries.start),
-            end: new Date(formEntries.end)
+            end: new Date(formEntries.end),
+            recurring: formEntries.recurring
         }
         props.onEventCreated(newEvent);
 
