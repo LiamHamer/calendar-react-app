@@ -10,22 +10,35 @@ function Home() {
     const { currentDate } = useContext(CurrentDateContext);
     const [events, setEvents] = useState<eventDetails[]>([]);
     const [filteredEvents, setFilteredEvents] = useState<eventDetails[]>([]);
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
+
 
     useEffect(() => {
-        if(events)
-        {
-            setFilteredEvents(events);
+        if (events) {
+            const filtered = events.filter((e) =>
+                new Date(e.start).getFullYear() === currentDate.getFullYear()
+                && new Date(e.start).getMonth() === currentDate.getMonth()
+                && new Date(e.start).getDay() === currentDate.getDay()
+            );
+            setFilteredEvents(filtered);
         }
-        // console.log('filtered', events.filter((e) => e.start.getFullYear() === currentDate.getFullYear()));
+        // console.log('filtered', events.filter((e) => new Date(e.start).getFullYear() === currentDate.getFullYear()));
         // setEvents({...events.filter((e) => e.start !== null)})
-    }, [currentDate, events, setFilteredEvents]);
+    }, [currentDate, setFilteredEvents, events]);
+
+    useEffect(() => {
+        if (currentDate) {
+            setSelectedYear(currentDate.getFullYear());
+        }
+    }, [currentDate]);
+
 
     const updateEvents = (event: eventDetails) => {
         setEvents([...events,
             event
         ]);
     }
-    
+
     const onEventCreated = (event: eventDetails) => {
         // pretend to do api stuff
         updateEvents(event);
