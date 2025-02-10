@@ -1,23 +1,49 @@
 import MainTemplate from "../../templates/maintemplate"
 import CreateEvent from "../../organisms/createEvent"
 import EventList from "../../organisms/eventlist"
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { eventDetails } from "../../interfaces/eventDetails";
 import { CurrentDateContext } from "../../../context/currentDateContext";
+import { useQuery } from "@tanstack/react-query";
 
 function Home() {
 
     const { currentDate } = useContext(CurrentDateContext);
     const [events, setEvents] = useState<eventDetails[]>([]);
     const [filteredEvents, setFilteredEvents] = useState<eventDetails[]>([]);
-    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
+    const selectedYear = currentDate.getFullYear();
 
+    const { data, isLoading, error } = useQuery({
+        queryKey: ['newMoon', selectedYear],
+        queryFn: () => fetch(`https://craigchamberlain.github.io/moon-data/api/new-moon-data/${selectedYear}`)
+            .then(res => res.json()),
+    });
+
+    const moonEvents: eventDetails[] = useMemo(() => {
+        if (data) {
+            return data.map((d: any) => {
+                return {
+                    id: 1,
+                    start: new Date(d),
+                    end: new Date(d),
+                    title: 'New Moon',
+                    description: 'wow new moon',
+                    recurring: 'no'
+                }
+            });
+        }
+    }, [data])
 
     useEffect(() => {
+        const filteredEvents: eventDetails[] = [];
+        if (moonEvents) {
+            console.log(moonEvents.filter((me) => me.start.toDateString() === currentDate.toDateString()));
+            // add moon events on this day
+            filteredEvents.push(...moonEvents.filter((me) => me.start.toDateString() === currentDate.toDateString()))
+        }
         if (events) {
             const comparisionDate = new Date(currentDate);
             comparisionDate.setHours(0, 0, 0);
-            console.log(currentDate.getDay())
             const filtered = events.filter((e) =>
                 // if start dates match (regardless of event time)
                 e.start.toDateString() === currentDate.toDateString()
@@ -40,17 +66,10 @@ function Home() {
                     && e.start.getMonth() === currentDate.getMonth()
                 )
             );
-            console.log(filtered);
-            setFilteredEvents(filtered);
+            filteredEvents.push(...filtered);
         }
-    }, [currentDate, setFilteredEvents, events]);
-
-    useEffect(() => {
-        if (currentDate) {
-            setSelectedYear(currentDate.getFullYear());
-        }
-    }, [currentDate]);
-
+        setFilteredEvents(filteredEvents);
+    }, [currentDate, events, data]);
 
     const updateEvents = (event: eventDetails) => {
         setEvents([...events,
