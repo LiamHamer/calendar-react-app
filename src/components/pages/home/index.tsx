@@ -36,34 +36,25 @@ function Home() {
             filteredEvents.push(...moonEvents.filter((me) => me.start.toDateString() === currentDate.toDateString()));
         }
         if (events) {
-            const comparisionDate = new Date(currentDate);
-            comparisionDate.setHours(0, 0, 0);
-            const filtered = events.filter((e) =>
-                // if start dates match (regardless of event time)
-                e.start.toDateString() === currentDate.toDateString()
-                ||
-                // weekly = repeat on a given day of the week
-                (e.recurring === 'weekly'
-                    && e.start <= comparisionDate
-                    && e.start.getDay() === currentDate.getDay())
-                ||
-                // monthly = repeat on the same day every 4th week 
-                (e.recurring === 'monthly'
-                    && e.start <= comparisionDate
-                    && e.start.getDay() === currentDate.getDay()
-                    && Number.isInteger((Math.round((comparisionDate.getTime() - e.start.getTime()) / (1000 * 3600 * 24)) / 28))
-                )
-                ||
-                // anually = once a year on the same date, regardless of day 
-                (e.recurring === 'anually'
-                    && e.start <= comparisionDate
-                    && e.start.getDate() === currentDate.getDate()
-                    && e.start.getMonth() === currentDate.getMonth()
-                )
+            const comparisonDate = new Date(currentDate);
+            comparisonDate.setHours(0, 0, 0)
+            const filtered = events.filter((e) => {
+                const eventDate = new Date(e.start)
+                eventDate.setHours(0, 0, 0);
+                const dayDiff = Math.round((comparisonDate.getTime() - eventDate.getTime()) / (1000 * 3600 * 24));
+                // straight match on date difference 
+                return dayDiff === 0 ||
+                    // same day every week
+                    e.recurring === 'weekly' && Number.isInteger(dayDiff / 7) ||
+                    // same day, every 4 weeks 
+                    e.recurring === 'monthly' && Number.isInteger(dayDiff / 28) ||
+                    // same date of year 
+                    e.recurring === 'anually' && Number.isInteger(dayDiff / 365);
+            }
             );
             filteredEvents.push(...filtered);
         }
-        return filteredEvents;
+        return filteredEvents.sort();
     }, [currentDate, events, moonEvents]);
 
     const updateEvents = (event: eventDetails) => {
