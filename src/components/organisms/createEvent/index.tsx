@@ -10,7 +10,6 @@ function CreateEvent(props: { onEventCreated?: (any) }) {
     // convert selected date into useable format for the html input
     const dateString = currentDate.toLocaleDateString("en-CA", { hour: '2-digit', minute: '2-digit', hourCycle: 'h24' }).replace(', ', 'T');
 
-
     const defaultFormState = {
         title: '',
         description: '',
