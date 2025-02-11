@@ -51,7 +51,7 @@ function Home() {
                 (e.recurring === 'monthly'
                     && e.start <= comparisionDate
                     && e.start.getDay() === currentDate.getDay()
-                    && (e.start.getWeek() - comparisionDate.getWeek()) / 4 % 1 === 0
+                    && Number.isInteger((Math.round((comparisionDate.getTime() - e.start.getTime()) / (1000 * 3600 * 24)) / 28))
                 )
                 ||
                 // anually = once a year on the same date, regardless of day 
