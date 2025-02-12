@@ -16,7 +16,9 @@ function EventList(props: { events: eventDetails[] }) {
     }
 
     return (
-        <h3>No Events on today :(</h3>
+        <section data-testid="empty-state">
+            <h3>No Events on today :(</h3>
+        </section>
     )
 
 
