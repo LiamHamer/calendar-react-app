@@ -70,8 +70,8 @@ function Home() {
 
     return (
         <MainTemplate>
-            <EventList events={todaysEvents} />
             <CreateEvent onEventCreated={onEventCreated} />
+            <EventList events={todaysEvents} />
         </MainTemplate>
     )
 }
