@@ -30,6 +30,7 @@ function Home() {
             });
         }
     }, [data])
+    // calculate what events occour on the selected date
     const todaysEvents = useMemo(() => {
         const filteredEvents: eventDetails[] = [];
         if (moonEvents) {
@@ -42,13 +43,14 @@ function Home() {
                 const eventDate = new Date(e.start)
                 eventDate.setHours(0, 0, 0);
                 const dayDiff = Math.round((comparisonDate.getTime() - eventDate.getTime()) / (1000 * 3600 * 24));
-                // straight match on date difference 
+                // check for events that start on the same date
                 return dayDiff === 0 ||
-                    // same day every week
+                    // calculate if recurring events should be shown on the currently selected date
+                    // for weekly, filter events that are on the same day
                     e.recurring === 'weekly' && Number.isInteger(dayDiff / 7) ||
-                    // same day, every 4 weeks 
+                    // for monthly, filter events that are on the same day, every 4 weeks 
                     e.recurring === 'monthly' && Number.isInteger(dayDiff / 28) ||
-                    // same date of year 
+                    // for anual, filter events that are on the same date of year 
                     e.recurring === 'anually' && Number.isInteger(dayDiff / 365);
             }
             );
@@ -64,7 +66,7 @@ function Home() {
     }
 
     const onEventCreated = (event: eventDetails) => {
-        // pretend to do api stuff
+        // this is where you could call an api to get the uptodate list of events 
         updateEvents(event);
     }
 

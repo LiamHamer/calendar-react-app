@@ -2,7 +2,7 @@ import { useState } from "react"
 
 function EventForm(props: { formState: any, formAction: any }) {
 
-    // should belong to a dateRange molecule
+    // should belong to a dateRange molecule, so logic around date ranges can be re used
     const [minDate, setMinDate] = useState(props.formState.data.startDate)
 
     const onDateStartChange = (event: any) => {

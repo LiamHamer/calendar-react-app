@@ -1,4 +1,3 @@
-"use client";
 import { useActionState, useContext } from "react";
 import EventForm from "../../molecules/eventform"
 import { eventDetails } from "../../interfaces/eventDetails";
@@ -7,7 +6,7 @@ import { CurrentDateContext } from "../../../context/currentDateContext";
 function CreateEvent(props: { onEventCreated?: (any) }) {
 
     const { currentDate } = useContext(CurrentDateContext);
-    // convert selected date into useable format for the html input
+    // convert selected date into useable format for the html input, would use a date picker component to handle this 
     const dateString = currentDate.toLocaleDateString("en-CA", { hour: '2-digit', minute: '2-digit', hourCycle: 'h24' }).replace(', ', 'T');
 
     const defaultFormState = {
@@ -18,6 +17,7 @@ function CreateEvent(props: { onEventCreated?: (any) }) {
         recurring: 'no'
     }
 
+    // event creation
     const onFormSubmit = async (
         prevState: any,
         formData: FormData,
