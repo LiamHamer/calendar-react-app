@@ -1,15 +1,41 @@
 import MainTemplate from "../../templates/maintemplate"
 import CreateEvent from "../../organisms/createEvent"
 import EventList from "../../organisms/eventlist"
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo, useReducer } from "react";
 import { eventDetails } from "../../interfaces/eventDetails";
 import { CurrentDateContext } from "../../../context/currentDateContext";
 import { useQuery } from "@tanstack/react-query";
 
+enum ACTIONS {
+    ADD_EVENT = 'add-event',
+    DELETE_EVENT = 'delete-event',
+    EDIT_EVENT = 'edit-event'
+}
+
+interface eventAction {
+    type: ACTIONS;
+    payload: eventDetails
+}
+
+function eventsReducer(events: eventDetails[], action: eventAction) {
+    console.log(action)
+    switch (action.type) {
+        case ACTIONS.ADD_EVENT:
+            return [...events, action.payload]
+        case ACTIONS.DELETE_EVENT:
+            return events.filter((event) => event.id !== action.payload.id)
+        default:
+            return events
+    }
+}
+
 function Home() {
 
+    const [events2, dispatch] = useReducer(eventsReducer, [])
+
+    console.log(events2);
+
     const { currentDate } = useContext(CurrentDateContext);
-    const [events, setEvents] = useState<eventDetails[]>([]);
     const selectedYear = currentDate.getFullYear();
     const { data, isLoading, error } = useQuery({
         queryKey: ['newMoon', selectedYear],
@@ -36,10 +62,10 @@ function Home() {
         if (moonEvents) {
             filteredEvents.push(...moonEvents.filter((me) => me.start.toDateString() === currentDate.toDateString()));
         }
-        if (events) {
+        if (events2) {
             const comparisonDate = new Date(currentDate);
             comparisonDate.setHours(0, 0, 0)
-            const filtered = events.filter((e) => {
+            const filtered = events2.filter((e) => {
                 const eventDate = new Date(e.start)
                 eventDate.setHours(0, 0, 0);
                 const dayDiff = Math.round((comparisonDate.getTime() - eventDate.getTime()) / (1000 * 3600 * 24));
@@ -57,23 +83,21 @@ function Home() {
             filteredEvents.push(...filtered);
         }
         return filteredEvents.sort();
-    }, [currentDate, events, moonEvents]);
+    }, [currentDate, events2, moonEvents]);
 
-    const updateEvents = (event: eventDetails) => {
-        setEvents([...events,
-            event
-        ]);
-    }
 
     const onEventCreated = (event: eventDetails) => {
-        // this is where you could call an api to get the uptodate list of events 
-        updateEvents(event);
+        dispatch({ type: ACTIONS.ADD_EVENT, payload: event })
+    }
+
+    const onDelete = (event: eventDetails) => {
+        dispatch({ type: ACTIONS.DELETE_EVENT, payload: event })
     }
 
     return (
         <MainTemplate>
             <CreateEvent onEventCreated={onEventCreated} />
-            <EventList events={todaysEvents} />
+            <EventList events={todaysEvents} onDelete={onDelete} />
         </MainTemplate>
     )
 }

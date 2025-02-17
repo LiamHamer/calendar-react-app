@@ -27,7 +27,7 @@ function CreateEvent(props: { onEventCreated?: (any) }) {
 
         const formEntries: any = Object.fromEntries(formData.entries());
         const newEvent: eventDetails = {
-            id: 1,
+            id: new Date().getTime(),
             title: formEntries.title,
             description: formEntries.description,
             start: new Date(formEntries.start),
